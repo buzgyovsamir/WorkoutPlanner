@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 
 
 class Workout(models.Model):
@@ -16,6 +17,25 @@ class Workout(models.Model):
         related_name="workouts",
         blank=True,
     )
+
+    def clean(self):
+        if self.title:
+            self.title = self.title.strip()
+
+        errors = {}
+
+        if len(self.title) < 3:
+            errors["title"] = "Workout name must be at least 3 characters long."
+
+        if self.duration_minutes is not None and self.duration_minutes < 1:
+            errors["duration_minutes"] = "Duration must be at least 1 minute."
+
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.title} - {self.date}"
