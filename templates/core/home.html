@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Workout Planner{% endblock %}
+
+{% block content %}
+<div class="p-4 p-md-5 mb-4 bg-white border rounded-3 shadow-sm">
+    <div class="col-lg-8">
+        <h1 class="display-6 fw-bold">Plan your training with less chaos.</h1>
+        <p class="lead mb-4">
+            Create programs, organize workouts, and manage exercises in one simple place.
+        </p>
+        <div class="d-flex flex-wrap gap-2">
+            <a class="btn btn-primary" href="{% url 'programs:list' %}">View Programs</a>
+            <a class="btn btn-outline-primary" href="{% url 'workouts:list' %}">View Workouts</a>
+            <a class="btn btn-outline-secondary" href="{% url 'exercises:list' %}">View Exercises</a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Programs</h2>
+                <p class="mb-3">Group workouts into clear training plans.</p>
+                <a class="btn btn-sm btn-outline-dark" href="{% url 'programs:create' %}">Create Program</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Workouts</h2>
+                <p class="mb-3">Track sessions and connect them to a program.</p>
+                <a class="btn btn-sm btn-outline-dark" href="{% url 'workouts:create' %}">Create Workout</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Exercises</h2>
+                <p class="mb-3">Build a simple exercise library for your training.</p>
+                <a class="btn btn-sm btn-outline-dark" href="{% url 'exercises:create' %}">Create Exercise</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
