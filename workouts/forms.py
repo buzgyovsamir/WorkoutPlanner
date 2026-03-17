@@ -43,7 +43,16 @@ class WorkoutForm(forms.ModelForm):
                     "rows": 4,
                 }
             ),
+            "program": forms.Select(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs["class"] = "form-select"
+            else:
+                field.widget.attrs["class"] = "form-control"
 
     def clean_title(self):
         title = self.cleaned_data["title"].strip()
@@ -78,6 +87,10 @@ class WorkoutAssignExercisesForm(forms.ModelForm):
         widgets = {
             "exercises": forms.CheckboxSelectMultiple(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["exercises"].widget.attrs["class"] = "form-check-input"
 
     def clean_exercises(self):
         exercises = self.cleaned_data["exercises"]

@@ -12,11 +12,34 @@ class ExerciseListView(ListView):
     template_name = "exercises/exercise_list.html"
     context_object_name = "exercises"
 
+    def get_queryset(self):
+        queryset = Exercise.objects.prefetch_related("workouts")
+        exercise_type = self.request.GET.get("type")
+        sort = self.request.GET.get("sort", "name")
+
+        
+
+        if exercise_type:
+            queryset = queryset.filter(exercise_type=exercise_type)
+
+        if sort == "type":
+            return queryset.order_by("exercise_type", "name")
+        return queryset.order_by("name")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_type"] = self.request.GET.get("type", "")
+        context["current_sort"] = self.request.GET.get("sort", "name")
+        return context
+
 
 class ExerciseDetailView(DetailView):
     model = Exercise
     template_name = "exercises/exercise_detail.html"
     context_object_name = "exercise"
+
+    def get_queryset(self):
+        return Exercise.objects.prefetch_related("workouts")
 
 
 class ExerciseCreateView(SuccessMessageMixin, CreateView):

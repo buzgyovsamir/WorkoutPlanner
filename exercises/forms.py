@@ -39,6 +39,7 @@ class ExerciseForm(forms.ModelForm):
             "name": forms.TextInput(
                 attrs={"placeholder": "Example: Bench Press"}
             ),
+            "exercise_type": forms.Select(),
             "description": forms.Textarea(
                 attrs={
                     "placeholder": "Optional notes about the exercise...",
@@ -52,6 +53,14 @@ class ExerciseForm(forms.ModelForm):
                 attrs={"placeholder": "Example: 12", "min": 1}
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields.values():
+            if isinstance(field.widget, forms.Select):
+                field.widget.attrs["class"] = "form-select"
+            else:
+                field.widget.attrs["class"] = "form-control"
 
     def clean_name(self):
         name = self.cleaned_data["name"].strip()

@@ -13,6 +13,19 @@ class ProgramListView(ListView):
     context_object_name = "programs"
 
 
+    def get_queryset(self):
+        queryset = Program.objects.all()
+        sort = self.request.GET.get("sort", "newest")
+        if sort == "name":
+            return queryset.order_by("name")
+        return queryset.order_by("-id")
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["current_sort"] = self.request.GET.get("sort", "newest")
+        return context
+
+
 class ProgramDetailView(DetailView):
     model = Program
     template_name = "programs/program_detail.html"

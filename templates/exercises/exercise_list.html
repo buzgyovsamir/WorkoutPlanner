@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load planner_extras %}
+
+{% block title %}Exercises | Workout Planner{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+        <h1 class="h2 mb-1">Exercises</h1>
+        <p class="text-muted mb-0">Browse your exercise library and filter it by type.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'exercises:create' %}">Create Exercise</a>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label" for="type">Exercise type</label>
+                <select class="form-select" id="type" name="type">
+                    <option value="">All types</option>
+                    <option value="compound" {% if current_type == 'compound' %}selected{% endif %}>Compound</option>
+                    <option value="hypertrophy" {% if current_type == 'hypertrophy' %}selected{% endif %}>Hypertrophy</option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label" for="sort">Sort by</label>
+                <select class="form-select" id="sort" name="sort">
+                    <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name A-Z</option>
+                    <option value="type" {% if current_sort == 'type' %}selected{% endif %}>Type then name</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button class="btn btn-dark" type="submit">Apply</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if exercises %}
+    <div class="row g-3">
+        {% for exercise in exercises %}
+            <div class="col-md-6 col-xl-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                            <h2 class="h5 mb-0">{{ exercise.name }}</h2>
+                            <span class="badge rounded-pill {{ exercise.exercise_type|exercise_badge_class }}">
+                                {{ exercise.exercise_type|format_exercise_type }}
+                            </span>
+                        </div>
+                        <p class="mb-2">{{ exercise.description|default:"No description yet."|truncatechars:100 }}</p>
+                        <p class="small text-muted mb-3">
+                            Suggested reps:
+                            {{ exercise.suggested_min_reps|default:"-" }} - {{ exercise.suggested_max_reps|default:"-" }}
+                        </p>
+                        <a class="btn btn-outline-primary btn-sm" href="{% url 'exercises:detail' exercise.pk %}">View details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info mb-0">No exercises match the selected filter yet.</div>
+{% endif %}
+{% endblock %}

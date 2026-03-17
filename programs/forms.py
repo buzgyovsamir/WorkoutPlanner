@@ -41,6 +41,8 @@ class ProgramForm(forms.ModelForm):
             "name": forms.TextInput(
                 attrs={"placeholder": "Example: Full Body Starter"}
             ),
+            "goal": forms.Select(),
+            "level": forms.Select(),
             "description": forms.Textarea(
                 attrs={
                     "placeholder": "Optional notes about the program...",
@@ -48,6 +50,18 @@ class ProgramForm(forms.ModelForm):
                 }
             ),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if isinstance(field.widget, forms.Select):
+                css_class = "form-select"
+            else:
+                css_class = "form-control"
+            field.widget.attrs["class"] = css_class
+
+            if field.disabled:
+                field.widget.attrs["readonly"] = True
 
     def clean_name(self):
         name = self.cleaned_data["name"].strip()

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Programs | Workout Planner{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+        <h1 class="h2 mb-1">Programs</h1>
+        <p class="text-muted mb-0">Browse all workout programs and sort them in a simple way.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'programs:create' %}">Create Program</a>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <span class="fw-semibold">Sort:</span>
+            <a class="btn btn-sm {% if current_sort == 'newest' %}btn-dark{% else %}btn-outline-dark{% endif %}" href="{% url 'programs:list' %}?sort=newest">Newest</a>
+            <a class="btn btn-sm {% if current_sort == 'name' %}btn-dark{% else %}btn-outline-dark{% endif %}" href="{% url 'programs:list' %}?sort=name">Name A-Z</a>
+        </div>
+    </div>
+</div>
+
+{% if programs %}
+    <div class="row g-3">
+        {% for program in programs %}
+            <div class="col-md-6 col-xl-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h2 class="h5">{{ program.name }}</h2>
+                        <p class="text-muted mb-2">{{ program.goal|capfirst }} | {{ program.level|capfirst }}</p>
+                        <p class="mb-3">{{ program.description|default:"No description yet."|truncatechars:110 }}</p>
+                        <a class="btn btn-outline-primary btn-sm" href="{% url 'programs:detail' program.pk %}">View details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info mb-0">No programs yet. Create your first one to get started.</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Workouts | Workout Planner{% endblock %}
+
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+    <div>
+        <h1 class="h2 mb-1">Workouts</h1>
+        <p class="text-muted mb-0">Filter workouts by program and sort them by title or date.</p>
+    </div>
+    <a class="btn btn-primary" href="{% url 'workouts:create' %}">Create Workout</a>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form method="get" class="row g-3 align-items-end">
+            <div class="col-md-5">
+                <label class="form-label" for="program">Program</label>
+                <select class="form-select" id="program" name="program">
+                    <option value="">All programs</option>
+                    {% for program in programs %}
+                        <option value="{{ program.pk }}" {% if current_program == program.pk|stringformat:'s' %}selected{% endif %}>{{ program.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-5">
+                <label class="form-label" for="sort">Sort by</label>
+                <select class="form-select" id="sort" name="sort">
+                    <option value="date_desc" {% if current_sort == 'date_desc' %}selected{% endif %}>Newest date first</option>
+                    <option value="date_asc" {% if current_sort == 'date_asc' %}selected{% endif %}>Oldest date first</option>
+                    <option value="title" {% if current_sort == 'title' %}selected{% endif %}>Title A-Z</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-grid">
+                <button class="btn btn-dark" type="submit">Apply</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if workouts %}
+    <div class="row g-3">
+        {% for workout in workouts %}
+            <div class="col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start gap-3">
+                            <div>
+                                <h2 class="h5">{{ workout.title }}</h2>
+                                <p class="text-muted mb-2">{{ workout.program.name }}</p>
+                            </div>
+                            <span class="badge text-bg-light">{{ workout.date|date:"d M Y" }}</span>
+                        </div>
+                        <p class="mb-2">{{ workout.notes|default:"No notes yet."|truncatechars:100 }}</p>
+                        <p class="small text-muted mb-3">
+                            {{ workout.duration_minutes }} minutes | {{ workout.exercises.count }} exercise{{ workout.exercises.count|pluralize }}
+                        </p>
+                        <a class="btn btn-outline-primary btn-sm" href="{% url 'workouts:detail' workout.pk %}">View details</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="alert alert-info mb-0">No workouts match the selected filter yet.</div>
+{% endif %}
+{% endblock %}

@@ -15,16 +15,16 @@
         <div class="collapse navbar-collapse" id="mainNavbar">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'programs:list' %}">Programs</a>
+                    <a class="nav-link {% if request.path|slice:':10' == '/programs/' %}active{% endif %}" href="{% url 'programs:list' %}">Programs</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'workouts:list' %}">Workouts</a>
+                    <a class="nav-link {% if request.path|slice:':10' == '/workouts/' %}active{% endif %}" href="{% url 'workouts:list' %}">Workouts</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'exercises:list' %}">Exercises</a>
+                    <a class="nav-link {% if request.path|slice:':11' == '/exercises/' %}active{% endif %}" href="{% url 'exercises:list' %}">Exercises</a>
                 </li>
             </ul>
         </div>
