@@ -1,71 +1,60 @@
 # Workout Planner
 
-A simple Django workout planner project for managing programs, workouts, and exercises.
+This is a small Django project for organizing workout programs, workouts, and exercises.
 
-## Project Summary
+The idea is simple:
+- a `Program` contains multiple `Workout` entries
+- a `Workout` belongs to one `Program`
+- a `Workout` can have multiple `Exercise` entries
 
-This project is built for a university assignment and demonstrates:
+The project was made as a university assignment, so the focus is on clear structure, CRUD functionality, form validation, and template work with Django.
 
-- 3 Django apps
-- 3 related models
-- validated forms
-- class-based CRUD views
-- shared templates with Bootstrap 5
-- filtering and sorting pages
-- custom template tags and filters
-- custom 404 page
-
-Authentication is intentionally not implemented because it is excluded by the assignment.
-
-## Technologies Used
+## Tech stack
 
 - Python 3.12
 - Django 6
 - PostgreSQL
 - Bootstrap 5
 
-## Apps Overview
+## Apps
 
-- `programs`: program management
-- `workouts`: workout management and assignment to programs
-- `exercises`: exercise management and assignment to workouts
+- `programs` - program data and program CRUD
+- `workouts` - workout data, workout CRUD, and exercise assignment
+- `exercises` - exercise data and exercise management
 
-## Database Overview
+## Main features
 
-Main relationships:
+- home page
+- full CRUD for programs
+- full CRUD for workouts
+- exercise list, details, create, edit, and delete
+- assigning exercises to workouts
+- form validation in forms and models
+- filtered and sorted list pages
+- custom 404 page
+- shared base template with navbar, footer, and messages
 
-- `Workout -> Program`: many-to-one
-- `Workout <-> Exercise`: many-to-many
+## Database
 
-The default configuration supports PostgreSQL.
+The default database is PostgreSQL.
 
-For easier local testing, the project can also use SQLite when `USE_SQLITE=True`.
+Relationships used in the project:
+- `Workout -> Program` is many-to-one
+- `Workout <-> Exercise` is many-to-many
 
-## Implemented Features
+There is also an optional SQLite fallback in `settings.py` if you only want to test the project quickly without PostgreSQL.
 
-- Home page
-- Program list, detail, create, update, delete
-- Workout list, detail, create, update, delete
-- Exercise list, detail, create, update, delete
-- Assign exercises to a workout
-- Filtered and sorted object pages
-- Model and form validation
-- Delete confirmation pages
-- Shared base template, navbar, footer, and messages
-- Custom template filter and inclusion tag
-- Custom 404 page
+## How to run the project
 
-## Setup Instructions
+1. Clone the repository
+2. Open the project folder
+3. Create and activate a virtual environment
+4. Install the dependencies
+5. Check the database settings in [settings.py](d:\Coding - Samir\workoutPlanner\workoutPlanner\settings.py)
+6. Run the migrations
+7. Start the development server
 
-1. Clone the repository.
-2. Open a terminal in the project folder.
-3. Create a virtual environment.
-4. Install dependencies.
-5. Check the database configuration in `workoutPlanner/settings.py`.
-6. Run migrations.
-7. Start the development server.
-
-## Virtual Environment
+## Virtual environment
 
 Windows PowerShell:
 
@@ -74,30 +63,22 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
-## Dependency Installation
+## Install dependencies
 
 ```powershell
 pip install -r requirements.txt
 ```
 
-## PostgreSQL Configuration
+## PostgreSQL setup
 
-1. Install PostgreSQL locally.
-2. Create a database named `workout_planner_db` or set your own `DB_NAME`.
-3. Update `DB_USER`, `DB_PASSWORD`, `DB_HOST`, and `DB_PORT` as needed.
-4. Make sure the PostgreSQL server is running.
+Make sure PostgreSQL is installed and running locally.
 
-The project uses PostgreSQL in the default configuration.
+By default, the project expects a database like this:
+- database name: `workout_planner_db`
+- host: `localhost`
+- port: `5432`
 
-## Optional SQLite Mode
-
-For quick local testing only:
-
-```env
-USE_SQLITE=True
-```
-
-This helps the project run even if PostgreSQL is not ready yet.
+If your PostgreSQL setup is different, update the database configuration in [settings.py](d:\Coding - Samir\workoutPlanner\workoutPlanner\settings.py).
 
 ## Migrations
 
@@ -106,21 +87,18 @@ python manage.py makemigrations
 python manage.py migrate
 ```
 
-## Run the Server
+## Run the server
 
 ```powershell
 python manage.py runserver
 ```
 
-Open:
+Then open:
 
-- `http://127.0.0.1:8000/`
+`http://127.0.0.1:8000/`
 
-## Public Repository Readiness
+## Notes
 
-This project is ready to be pushed to GitHub or another public repository.
-
-Before publishing:
-
-- do not commit real database passwords
-- keep `USE_SQLITE=False` if you want to present the PostgreSQL version
+- Authentication is not included, because it is outside the assignment scope.
+- The project uses Bootstrap for the layout and styling.
+- The code is split into 3 apps so the responsibilities stay clear.

@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import include, path
 
 from programs.views import (
     ProgramCreateView,
@@ -10,10 +10,14 @@ from programs.views import (
 
 app_name = "programs"
 
+detail_patterns = [
+    path("", ProgramDetailView.as_view(), name="detail"),
+    path("update/", ProgramUpdateView.as_view(), name="update"),
+    path("delete/", ProgramDeleteView.as_view(), name="delete"),
+]
+
 urlpatterns = [
     path("", ProgramListView.as_view(), name="list"),
     path("create/", ProgramCreateView.as_view(), name="create"),
-    path("<int:pk>/", ProgramDetailView.as_view(), name="detail"),
-    path("<int:pk>/update/", ProgramUpdateView.as_view(), name="update"),
-    path("<int:pk>/delete/", ProgramDeleteView.as_view(), name="delete"),
+    path("<int:pk>/", include(detail_patterns)),
 ]
